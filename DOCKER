@@ -1,0 +1,37 @@
+# Usar una imagen base de Python oficial
+FROM python:3.9-slim
+
+# Establecer el directorio de trabajo en el contenedor
+WORKDIR /src
+
+# Instalar dependencias de sistema para TA-Lib
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    wget \
+    libffi-dev \
+    libssl-dev \
+    libxml2-dev \
+    libxslt1-dev \
+    zlib1g-dev
+
+# Descargar e instalar TA-Lib
+RUN wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz && \
+    tar -xvzf ta-lib-0.4.0-src.tar.gz && \
+    cd ta-lib/ && \
+    ./configure --prefix=/usr && \
+    make && \
+    make install && \
+    cd .. && rm -rf ta-lib ta-lib-0.4.0-src.tar.gz
+
+# Instalar biblioteca TA-Lib de Python
+RUN pip install numpy
+RUN pip install TA-Lib
+
+# Copiar los archivos locales al contenedor
+COPY . .
+
+# Instalar las dependencias de Python del proyecto
+RUN pip install -r requirements.txt
+
+# Comando para ejecutar al iniciar el contenedor
+CMD ["streamlit", "run", "APREDECIR.py"]

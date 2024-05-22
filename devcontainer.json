@@ -1,0 +1,16 @@
+{
+    "name": "Python & TA-Lib",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "settings": { 
+        "terminal.integrated.shell.linux": "/bin/bash"
+    },
+    "extensions": [
+        "ms-python.python"
+    ],
+    "forwardPorts": [
+        8501
+    ],
+    "postCreateCommand": "echo 'Environment setup complete!'"
+}
